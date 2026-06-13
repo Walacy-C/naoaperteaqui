@@ -1,201 +1,385 @@
+```html
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Você me ama?</title>
+    <title>Não Toque Aqui</title>
+    <!-- Tailwind CSS para estilização rápida e responsiva -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body {
-            background-color: #00ffff; /* Ciano */
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            margin: 0;
-            font-family: 'Arial', sans-serif;
+        /* Transições de fundo ultra suaves para as fases (hacker -> romântico) */
+        .ambient-transition {
+            transition: background-color 3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .container {
-            text-align: center;
-            position: relative;
-            z-index: 10;
+        /* Efeito de digitação/cursor piscante para o terminal */
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+        .cursor::after {
+            content: '_';
+            animation: blink 1s infinite;
         }
 
-        h1 {
-            font-size: 2.5rem;
-            color: #333;
-            margin-bottom: 2rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        /* Animação suave de fade-in para a imagem e elementos */
+        .fade-in {
+            animation: fadeInEase 2.5s forwards cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .btn {
-            padding: 12px 35px;
-            font-size: 1.2rem;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: transform 0.2s, background-color 0.2s;
-            margin: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        /* Animação de entrada suave para o texto romântico */
+        .fade-in-text {
+            animation: fadeInTextEase 3s forwards cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        #btn-sim {
-            background-color: #4CAF50;
-            color: white;
-            z-index: 20;
+        /* Pulsação romântica sutil de fundo para a fase final */
+        @keyframes romanticPulse {
+            0%, 100% { background-color: #3b0712; } /* Vermelho Rose Profundo */
+            50% { background-color: #580c1f; } /* Vermelho Carmim Aconchegante */
+        }
+        .romantic-bg-pulse {
+            animation: romanticPulse 10s infinite ease-in-out;
         }
 
-        #btn-sim:hover {
-            transform: scale(1.1);
-            background-color: #45a049;
-        }
-
-        #btn-nao {
-            background-color: #f44336;
-            color: white;
-            position: relative;
-            white-space: nowrap;
-            z-index: 20;
-        }
-
-        /* Animação de negação (shaking) */
-        .shake {
-            animation: shakeAnim 0.3s ease-in-out;
-        }
-
-        @keyframes shakeAnim {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px) rotate(-5deg); }
-            50% { transform: translateX(10px) rotate(5deg); }
-            75% { transform: translateX(-10px) rotate(-5deg); }
-        }
-
-        /* Estilo do coração central (agora menor) */
-        .heart {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 5rem; /* Reduzido de 10rem para 5rem */
-            color: #e91e63;
-            animation: pulse 1s infinite;
-            z-index: 100;
-            display: none;
-        }
-
-        @keyframes pulse {
-            0% { transform: translate(-50%, -50%) scale(1); }
-            50% { transform: translate(-50%, -50%) scale(1.2); }
-            100% { transform: translate(-50%, -50%) scale(1); }
-        }
-
-        #message {
-            display: none;
-            font-size: 1.8rem;
-            color: #e91e63;
-            margin-top: 20px;
-            font-weight: bold;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="container" id="main-container">
-        <h1 id="question">Você me ama?</h1>
-        
-        <div class="flex justify-center items-center h-48 relative w-full max-w-md mx-auto">
-            <button id="btn-sim" class="btn" onclick="showLove()">Sim</button>
-            <button id="btn-nao" class="btn">Não</button>
-        </div>
-        
-        <div id="message">Eu também te amo ❤️</div>
-    </div>
-
-    <div id="big-heart" class="heart">❤️</div>
-
-    <script>
-        const btnNao = document.getElementById('btn-nao');
-        const btnSim = document.getElementById('btn-sim');
-        const heart = document.getElementById('big-heart');
-        const message = document.getElementById('message');
-        const question = document.getElementById('question');
-
-        let isMoving = false;
-
-        // Função para mover o botão "Não" com animação de negação
-        function handleNaoInteraction() {
-            if (isMoving) return;
-            isMoving = true;
-
-            // Adiciona a classe de balanço (shake)
-            btnNao.classList.add('shake');
-
-            // Espera a animação de balanço terminar antes de fugir
-            setTimeout(() => {
-                const padding = 50;
-                const maxX = window.innerWidth - btnNao.offsetWidth - padding;
-                const maxY = window.innerHeight - btnNao.offsetHeight - padding;
-
-                const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
-                const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
-
-                btnNao.style.position = 'fixed';
-                btnNao.style.left = randomX + 'px';
-                btnNao.style.top = randomY + 'px';
-                
-                // Remove a classe para poder repetir na próxima vez
-                btnNao.classList.remove('shake');
-                isMoving = false;
-            }, 300); // Duração da animação de shake
-        }
-
-        // Eventos para o botão fugir e balançar
-        btnNao.addEventListener('mouseover', handleNaoInteraction);
-        btnNao.addEventListener('touchstart', (e) => {
-            e.preventDefault(); 
-            handleNaoInteraction();
-        });
-
-        // Função quando clicar no "Sim"
-        function showLove() {
-            heart.style.display = 'block';
-            message.style.display = 'block';
-            btnNao.style.display = 'none';
-            btnSim.style.display = 'none';
-            question.style.display = 'none';
-            
-            // Criar corações menores extras voando
-            for(let i = 0; i < 25; i++) {
-                setTimeout(createSmallHeart, i * 50);
+        @keyframes fadeInEase {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(10px);
+                filter: blur(8px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+                filter: blur(0);
             }
         }
 
-        function createSmallHeart() {
-            const smallHeart = document.createElement('div');
-            smallHeart.innerHTML = '❤️';
-            smallHeart.style.position = 'fixed';
-            smallHeart.style.left = Math.random() * 100 + 'vw';
-            smallHeart.style.top = '110vh'; // Começa embaixo
-            smallHeart.style.fontSize = (Math.random() * 20 + 15) + 'px';
-            smallHeart.style.zIndex = '150';
-            smallHeart.style.transition = `all ${Math.random() * 2 + 2}s linear`;
-            document.body.appendChild(smallHeart);
-
-            // Animação de subida
-            setTimeout(() => {
-                smallHeart.style.top = '-10vh';
-                smallHeart.style.left = (parseFloat(smallHeart.style.left) + (Math.random() * 20 - 10)) + 'vw';
-                smallHeart.style.opacity = '0';
-            }, 50);
-
-            setTimeout(() => {
-                smallHeart.remove();
-            }, 4000);
+        @keyframes fadeInTextEase {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
+
+        /* Efeito de corações flutuando no fundo */
+        .heart {
+            position: absolute;
+            bottom: -50px;
+            font-size: 20px;
+            opacity: 0.7;
+            pointer-events: none;
+            animation: floatUp 8s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg) translateX(0);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-110vh) rotate(360deg) translateX(50px);
+                opacity: 0;
+            }
+        }
+
+        /* Scrollbar customizada e elegante para o terminal de música */
+        #song-terminal-log::-webkit-scrollbar {
+            width: 4px;
+        }
+        #song-terminal-log::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+        #song-terminal-log::-webkit-scrollbar-thumb {
+            background: rgba(244, 63, 94, 0.4);
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body class="ambient-transition bg-neutral-50 text-neutral-900 min-h-screen flex flex-col justify-center items-center overflow-x-hidden p-4 select-none relative">
+
+    <!-- Container de efeitos (corações flutuantes) -->
+    <div id="hearts-container" class="absolute inset-0 pointer-events-none overflow-hidden z-0"></div>
+
+    <!-- ESTADO INICIAL: Tela de distração minimalista -->
+    <div id="initial-screen" class="z-10 flex flex-col items-center justify-center transition-all duration-1000 ease-in-out">
+        <button id="danger-btn" class="px-8 py-4 border-2 border-neutral-400 text-neutral-500 hover:text-neutral-900 hover:border-neutral-900 text-lg font-mono tracking-widest rounded-md uppercase transition-all duration-300 hover:scale-105 active:scale-95 focus:outline-none">
+            Não toque aqui
+        </button>
+    </div>
+
+    <!-- ESTADO DE REVELAÇÃO: Terminal, Imagem, Carta e Player (Inicialmente oculto) -->
+    <div id="reveal-screen" class="hidden z-10 w-full max-w-xl flex flex-col items-center text-center space-y-6 my-8">
+        
+        <!-- Terminal de Carregamento (Visual Hacker Inicial) -->
+        <div id="terminal-box" class="w-full font-mono text-left text-sm text-red-500 bg-black/60 p-4 rounded-lg border border-red-900/30 shadow-2xl space-y-2 h-36 overflow-hidden transition-all duration-1000">
+            <div id="line-1" class="opacity-0 transition-opacity duration-300"></div>
+            <div id="line-2" class="opacity-0 transition-opacity duration-300"></div>
+            <div id="line-3" class="opacity-0 transition-opacity duration-300"></div>
+            <div id="line-4" class="opacity-0 transition-opacity duration-300 cursor"></div>
+        </div>
+
+        <!-- Container da Imagem Misteriosa -->
+        <div id="image-container" class="opacity-0 w-full max-w-xs md:max-w-sm rounded-2xl overflow-hidden shadow-[0_15px_50px_rgba(0,0,0,0.6)] border border-rose-950/20 transition-all duration-1000">
+            <img 
+                src="https://files.catbox.moe/cp16qm.jpg" 
+                alt="Revelação" 
+                class="w-full h-auto object-cover object-center"
+                onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=600'; console.log('Erro ao carregar imagem principal.');"
+            />
+        </div>
+
+        <!-- Mensagem de Texto de Carlos para Henrique -->
+        <div id="romantic-text-container" class="opacity-0 w-full max-w-lg px-6 py-6 text-center transition-all duration-1000 bg-black/25 backdrop-blur-md rounded-2xl border border-rose-200/10 shadow-xl">
+            <!-- Cabeçalho em Destaque -->
+            <div class="border-b border-rose-300/20 pb-3 mb-4">
+                <span class="block font-sans text-xs tracking-widest text-rose-300 uppercase">Mensagem Especial</span>
+                <h1 class="font-serif text-lg md:text-xl text-rose-200 font-bold tracking-wide mt-1">
+                    De: Carlos Walacy &nbsp;•&nbsp; Para: José Henrique
+                </h1>
+            </div>
+            
+            <!-- Corpo da Carta Romântica -->
+            <p class="font-serif text-base md:text-lg text-rose-100 italic drop-shadow-md leading-relaxed text-justify">
+                Henrique, eu escrevi isso não para te assustar ou nada, mas sim para demonstrar o amor que sinto por você, pelo carinho e pela dedicação que você tem por mim. Graças a você, eu pude mudar, mudar para melhor... para um garoto mais responsável, mais animado, mais sincero, mais sociável e romântico.
+            </p>
+            <p class="font-serif text-base md:text-lg text-rose-100 italic drop-shadow-md leading-relaxed text-justify mt-4">
+                Você foi a primeira pessoa por quem eu realmente senti algo exatamente romântico. Por você, eu me assumi, te apresentei até para as pessoas menos íntimas que eu tinha, te dei muitos presentes, tudo isso pela gente. Não, isso não é um texto para te dar broncas nem nada, mas sim para você saber que eu sempre estarei aqui quando você precisar. Seja para rir, chorar, defender, estudar, trabalhar, tudo!
+            </p>
+            <p class="font-serif text-base md:text-lg text-rose-100 italic drop-shadow-md leading-relaxed text-justify mt-4">
+                Eu finalmente pude me sentir confortável ao lado de alguém, você. Você fez eu sentir coisas que eu nunca senti na minha vida. Mas graças a você, eu finalmente consegui me sentir seguro novamente, me recuperar de ferimentos graves do passado e finalmente mudar para alguém melhor. Eu te amo! 💙
+            </p>
+        </div>
+
+        <!-- Player de Vídeo e Áudio Escondido inicialmente -->
+        <div id="video-wrapper" class="hidden w-full max-w-md rounded-2xl overflow-hidden shadow-[0_15px_40px_rgba(244,63,94,0.3)] border border-rose-500/30 transition-all duration-1000 transform scale-95 opacity-0">
+            <video id="romantic-video" class="w-full h-auto aspect-video bg-black" src="https://files.catbox.moe/0mehle.mp4" controls preload="auto"></video>
+        </div>
+
+        <!-- Terminal de Comando Interativo -->
+        <div id="command-terminal-container" class="opacity-0 w-full max-w-lg transition-all duration-1000">
+            <div class="w-full bg-black/80 rounded-2xl border border-rose-500/30 p-4 font-mono text-xs text-rose-300 space-y-3 shadow-2xl">
+                <!-- Cabeçalho do terminal -->
+                <div class="flex items-center justify-between border-b border-rose-500/20 pb-2 mb-1">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-3 h-3 rounded-full bg-red-500/80"></span>
+                        <span class="w-3 h-3 rounded-full bg-yellow-500/80"></span>
+                        <span class="w-3 h-3 rounded-full bg-green-500/80"></span>
+                        <span class="text-rose-400/70 ml-2 text-[11px] font-semibold">trilha_sonora.sh</span>
+                    </div>
+                    <span class="text-[10px] text-rose-500/50">v1.2.6</span>
+                </div>
+
+                <!-- Campo de Entrada com Comando Pré-pronto e Botão Enter -->
+                <div class="flex items-center justify-between bg-black/40 p-2.5 rounded-xl border border-rose-500/15">
+                    <div class="flex items-center space-x-2 overflow-x-auto whitespace-nowrap scrollbar-none py-1">
+                        <span class="text-emerald-400 font-bold">carlos@amor:~$</span>
+                        <span id="cmd-text" class="text-rose-100 font-bold tracking-wide select-all">./play_our_song.sh</span>
+                    </div>
+                    <button id="btn-enter" class="bg-rose-600 hover:bg-rose-500 active:bg-rose-700 text-white font-bold font-mono px-4 py-1.5 rounded-lg text-xs flex items-center space-x-1.5 transition-all duration-200 shadow-md shadow-rose-950/50 hover:scale-105 active:scale-95 focus:outline-none shrink-0 animate-pulse">
+                        <span>ENTER</span>
+                        <span class="text-rose-200">↵</span>
+                    </button>
+                </div>
+
+                <!-- Painel de Transcrição/Tradução da Música -->
+                <div id="song-terminal-log" class="hidden h-40 overflow-y-auto space-y-2.5 bg-black/70 p-3 rounded-xl text-left border border-rose-950/50 transition-all duration-500 font-sans">
+                    <!-- Logs adicionados dinamicamente via JS -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const body = document.body;
+        const initialScreen = document.getElementById('initial-screen');
+        const revealScreen = document.getElementById('reveal-screen');
+        const dangerBtn = document.getElementById('danger-btn');
+        const terminalBox = document.getElementById('terminal-box');
+        const imgContainer = document.getElementById('image-container');
+        const textContainer = document.getElementById('romantic-text-container');
+        const heartsContainer = document.getElementById('hearts-container');
+
+        // Novos elementos da música e terminal de comando
+        const commandTerminalContainer = document.getElementById('command-terminal-container');
+        const btnEnter = document.getElementById('btn-enter');
+        const songTerminalLog = document.getElementById('song-terminal-log');
+        const videoWrapper = document.getElementById('video-wrapper');
+        const romanticVideo = document.getElementById('romantic-video');
+
+        // Linhas de texto do terminal hacker
+        const lines = [
+            { id: 'line-1', text: '> Inicializando protocolo de quebra de segurança...', delay: 800 },
+            { id: 'line-2', text: '> Ignorando permissões do sistema local...', delay: 1800 },
+            { id: 'line-3', text: '> Descriptografando arquivos secretos...', delay: 2800 },
+            { id: 'line-4', text: '> Acesso concedido. Abrindo registro...', delay: 3800 }
+        ];
+
+        // Tradução poética sincronizada com a minutagem aproximada do vídeo de 59 segundos
+        const lyricsTimeline = [
+            { time: 0, text: "[SISTEMA] Conectando trilha sonora do vídeo..." },
+            { time: 2, text: "Podemos morrer juntos? E existe um paraíso?" },
+            { time: 8, text: "Todo mundo sabe disso, então é melhor chegar mais perto." },
+            { time: 14, text: "Me foda como se fôssemos as duas últimas pessoas na—" },
+            { time: 20, text: "Todo mundo está morrendo, você é quem eu estou segurando, explosões" },
+            { time: 26, text: "Me foda como se fôssemos as duas últimas pessoas na Terra, Terra, Terra" },
+            { time: 38, text: "Me foda como se fôssemos as duas últimas pessoas na Terra, Terra, Terra" },
+            { time: 48, text: "Me foda como se fôssemos as duas últimas pessoas na—" },
+            { time: 54, text: "[SISTEMA] Reprodução concluída. Obrigado por ser meu universo, Henrique. 💙" }
+        ];
+
+        let lastLoggedIndex = -1;
+
+        // Função para criar corações flutuantes no fundo
+        function createHeart() {
+            const hearts = ['❤️', '💙', '💕', '💖', '✨'];
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+            
+            heart.style.left = Math.random() * 100 + 'vw';
+            const size = Math.random() * 20 + 15;
+            heart.style.fontSize = size + 'px';
+            const duration = Math.random() * 5 + 6;
+            heart.style.animationDuration = duration + 's';
+            
+            heartsContainer.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, duration * 1000);
+        }
+
+        dangerBtn.addEventListener('click', () => {
+            // 1. Primeira transição: Vai para o visual de "Hacker"
+            body.classList.remove('bg-neutral-50', 'text-neutral-900');
+            body.classList.add('bg-[#0b0101]', 'text-red-600');
+
+            initialScreen.classList.add('opacity-0', 'scale-90');
+            
+            setTimeout(() => {
+                initialScreen.classList.add('hidden');
+                revealScreen.classList.remove('hidden');
+                
+                // Começar a simular o terminal hacker
+                startTerminalSequence();
+            }, 1000);
+        });
+
+        function startTerminalSequence() {
+            lines.forEach((line) => {
+                setTimeout(() => {
+                    const element = document.getElementById(line.id);
+                    element.textContent = line.text;
+                    element.classList.remove('opacity-0');
+                    element.classList.add('opacity-100');
+                    
+                    if (line.id !== 'line-4') {
+                        element.classList.remove('cursor');
+                    }
+                }, line.delay);
+            });
+
+            // 2. Segunda transição (A Transição Romântica):
+            setTimeout(() => {
+                // Esconde completamente o terminal hacker para focar na surpresa
+                terminalBox.classList.add('opacity-0', 'scale-90');
+                setTimeout(() => {
+                    terminalBox.style.display = 'none';
+                }, 1000);
+
+                // O fundo muda para o vermelho romântico pulsante
+                body.classList.remove('bg-[#0b0101]');
+                body.classList.add('romantic-bg-pulse');
+                
+                // Faz a foto aparecer em fade-in
+                imgContainer.classList.remove('opacity-0');
+                imgContainer.classList.add('fade-in');
+
+                // Faz a carta do Carlos e o terminal de música surgirem
+                setTimeout(() => {
+                    textContainer.classList.remove('opacity-0');
+                    textContainer.classList.add('fade-in-text');
+                    
+                    commandTerminalContainer.classList.remove('opacity-0');
+                    commandTerminalContainer.classList.add('fade-in-text');
+                    
+                    // Iniciar chuva de corações
+                    setInterval(createHeart, 500);
+                }, 1200);
+
+            }, 5200);
+        }
+
+        // 3. Terceira Ação: Ao clicar no botão ENTER do terminal de música
+        btnEnter.addEventListener('click', () => {
+            // Desativa e altera o botão para dar feedback visual de execução
+            btnEnter.disabled = true;
+            btnEnter.classList.remove('animate-pulse', 'bg-rose-600', 'hover:bg-rose-500');
+            btnEnter.classList.add('bg-zinc-800', 'text-zinc-500', 'cursor-not-allowed');
+            btnEnter.innerHTML = `<span>RODANDO</span> <span class="animate-spin">⏳</span>`;
+
+            // Revela o player do vídeo de forma fluida
+            videoWrapper.classList.remove('hidden');
+            setTimeout(() => {
+                videoWrapper.classList.remove('opacity-0', 'scale-95');
+                videoWrapper.classList.add('opacity-100', 'scale-100');
+                
+                // Tenta reproduzir o vídeo automaticamente
+                romanticVideo.play().catch(error => {
+                    console.log("A reprodução automática foi bloqueada. Aguardando interação do usuário no player.", error);
+                });
+            }, 100);
+
+            // Abre o painel de transcrição no terminal
+            songTerminalLog.classList.remove('hidden');
+            
+            // Rola a página suavemente para o Henrique visualizar tudo sincronizado
+            setTimeout(() => {
+                videoWrapper.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 800);
+        });
+
+        // 4. Transcrever os momentos do vídeo no terminal em tempo real com base no tempo do vídeo
+        romanticVideo.addEventListener('timeupdate', () => {
+            const currentTime = romanticVideo.currentTime;
+            
+            lyricsTimeline.forEach((item, index) => {
+                if (currentTime >= item.time && index > lastLoggedIndex) {
+                    lastLoggedIndex = index;
+                    
+                    const logLine = document.createElement('div');
+                    
+                    // Diferencia visualmente as mensagens do sistema das estrofes da música
+                    if (item.text.startsWith("[")) {
+                        logLine.className = 'text-rose-400/80 font-mono text-[11px] leading-relaxed pl-2 text-left';
+                        logLine.innerHTML = `<span>${item.text}</span>`;
+                    } else {
+                        logLine.className = 'text-rose-100 font-serif text-sm border-l-2 border-rose-500 pl-3.5 py-1 animate-pulse leading-relaxed text-left font-bold italic';
+                        logLine.innerHTML = `<span>"${item.text}"</span>`;
+                    }
+                    
+                    songTerminalLog.appendChild(logLine);
+                    
+                    // Rola a área de logs automaticamente para baixo a cada verso novo
+                    songTerminalLog.scrollTop = songTerminalLog.scrollHeight;
+                }
+            });
+        });
+
+        // Reinicia os logs caso o vídeo recomece ou sofra busca manual de tempo (seek)
+        romanticVideo.addEventListener('seeked', () => {
+            if (romanticVideo.currentTime < 1) {
+                lastLoggedIndex = -1;
+                songTerminalLog.innerHTML = '';
+            }
+        });
     </script>
 </body>
 </html>
 
+```
