@@ -1,382 +1,375 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Não Toque Aqui</title>
-    <!-- Tailwind CSS para estilização rápida e responsiva -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Transições de fundo ultra suaves para as fases (hacker -> romântico) */
-        .ambient-transition {
-            transition: background-color 3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feliz Aniversário, Henrique</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;1,400&family=Alex+Brush&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f4f4f6;
+      color: #333336;
+      transition: background-color 0.8s ease, color 0.8s ease;
+      overflow-x: hidden;
+    }
 
-        /* Efeito de digitação/cursor piscante para o terminal */
-        @keyframes blink {
-            50% { opacity: 0; }
-        }
-        .cursor::after {
-            content: '_';
-            animation: blink 1s infinite;
-        }
+    .serif-title {
+      font-family: 'Playfair Display', serif;
+    }
 
-        /* Animação suave de fade-in para a imagem e elementos */
-        .fade-in {
-            animation: fadeInEase 2.5s forwards cubic-bezier(0.4, 0, 0.2, 1);
-        }
+    .handwritten-sig {
+      font-family: 'Caveat', cursive;
+    }
 
-        /* Animação de entrada suave para o texto romântico */
-        .fade-in-text {
-            animation: fadeInTextEase 3s forwards cubic-bezier(0.4, 0, 0.2, 1);
-        }
+    .letter-body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      line-height: 1.7;
+    }
 
-        /* Pulsação romântica sutil de fundo para a fase final */
-        @keyframes romanticPulse {
-            0%, 100% { background-color: #3b0712; } /* Vermelho Rose Profundo */
-            50% { background-color: #580c1f; } /* Vermelho Carmim Aconchegante */
-        }
-        .romantic-bg-pulse {
-            animation: romanticPulse 10s infinite ease-in-out;
-        }
+    .video-card {
+      background: #ffffff;
+      border: 1px solid #e2e2e8;
+      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03);
+      transition: all 0.5s ease;
+    }
 
-        @keyframes fadeInEase {
-            from {
-                opacity: 0;
-                transform: scale(0.95) translateY(10px);
-                filter: blur(8px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-                filter: blur(0);
-            }
-        }
+    /* Estilo do Canvas de Chuva ao Fundo */
+    #rainCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0;
+      transition: opacity 1.2s ease;
+    }
 
-        @keyframes fadeInTextEase {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    /* Animação Flutuante para o Envelope */
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(1deg); }
+    }
 
-        /* Efeito de corações flutuando no fundo */
-        .heart {
-            position: absolute;
-            bottom: -50px;
-            font-size: 20px;
-            opacity: 0.7;
-            pointer-events: none;
-            animation: floatUp 8s linear infinite;
-        }
+    .floating-envelope {
+      animation: float 3s ease-in-out infinite;
+    }
 
-        @keyframes floatUp {
-            0% {
-                transform: translateY(0) rotate(0deg) translateX(0);
-                opacity: 0.8;
-            }
-            100% {
-                transform: translateY(-110vh) rotate(360deg) translateX(50px);
-                opacity: 0;
-            }
-        }
+    /* Efeito de abertura modal suave */
+    .modal-backdrop {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
 
-        /* Scrollbar customizada e elegante para o terminal de música */
-        #song-terminal-log::-webkit-scrollbar {
-            width: 4px;
-        }
-        #song-terminal-log::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.2);
-        }
-        #song-terminal-log::-webkit-scrollbar-thumb {
-            background: rgba(244, 63, 94, 0.4);
-            border-radius: 2px;
-        }
-    </style>
+    .modal-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-content {
+      transform: scale(0.92) translateY(20px);
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .modal-backdrop.active .modal-content {
+      transform: scale(1) translateY(0);
+    }
+  </style>
 </head>
-<body class="ambient-transition bg-neutral-50 text-neutral-900 min-h-screen flex flex-col justify-center items-center overflow-x-hidden p-4 select-none relative">
+<body class="min-h-screen py-10 px-4 sm:px-6 lg:px-8 relative">
 
-    <!-- Container de efeitos (corações flutuantes) -->
-    <div id="hearts-container" class="absolute inset-0 pointer-events-none overflow-hidden z-0"></div>
+  <!-- Canvas da Chuva -->
+  <canvas id="rainCanvas"></canvas>
 
-    <!-- ESTADO INICIAL: Tela de distração minimalista -->
-    <div id="initial-screen" class="z-10 flex flex-col items-center justify-center transition-all duration-1000 ease-in-out">
-        <button id="danger-btn" class="px-8 py-4 border-2 border-neutral-400 text-neutral-500 hover:text-neutral-900 hover:border-neutral-900 text-lg font-mono tracking-widest rounded-md uppercase transition-all duration-300 hover:scale-105 active:scale-95 focus:outline-none">
-            Não toque aqui
-        </button>
-    </div>
+  <div class="relative z-10">
+    <!-- Cabeçalho Suave -->
+    <header class="max-w-2xl mx-auto text-center mb-12">
+      <span class="text-xs uppercase tracking-widest text-gray-400 font-semibold" id="headerTag">Uma lembrança especial</span>
+      <h1 class="serif-title text-3xl sm:text-4xl text-gray-800 mt-2 mb-3 transition-colors duration-700" id="headerTitle">Feliz Aniversário, Henrique</h1>
+      <p class="text-gray-500 text-sm sm:text-base leading-relaxed max-w-lg mx-auto transition-colors duration-700" id="headerSub">
+        Guardei nossas memórias com muito carinho. Que o seu novo ciclo seja repleto de paz, sorrisos e luz.
+      </p>
+      <div class="w-12 h-[1px] bg-gray-300 mx-auto mt-6"></div>
+    </header>
 
-    <!-- ESTADO DE REVELAÇÃO: Terminal, Imagem, Carta e Player (Inicialmente oculto) -->
-    <div id="reveal-screen" class="hidden z-10 w-full max-w-xl flex flex-col items-center text-center space-y-6 my-8">
-        
-        <!-- Terminal de Carregamento (Visual Hacker Inicial) -->
-        <div id="terminal-box" class="w-full font-mono text-left text-sm text-red-500 bg-black/60 p-4 rounded-lg border border-red-900/30 shadow-2xl space-y-2 h-36 overflow-hidden transition-all duration-1000">
-            <div id="line-1" class="opacity-0 transition-opacity duration-300"></div>
-            <div id="line-2" class="opacity-0 transition-opacity duration-300"></div>
-            <div id="line-3" class="opacity-0 transition-opacity duration-300"></div>
-            <div id="line-4" class="opacity-0 transition-opacity duration-300 cursor"></div>
+    <!-- Lista de Vídeos -->
+    <main class="max-w-xl mx-auto space-y-8">
+
+      <!-- Vídeo 1 -->
+      <div class="video-card rounded-2xl p-4 sm:p-5">
+        <div class="overflow-hidden rounded-xl bg-black/5 aspect-video mb-3">
+          <video class="w-full h-full object-cover" controls preload="metadata">
+            <source src="https://uploads.zero-two-apis.store/uploads/videos/a01ec1072ce1e778132cce4490aad505847e2806811cd860f548f236b2d89e95.mp4" type="video/mp4">
+          </video>
+        </div>
+        <p class="text-xs text-gray-400 text-right">Momento 01</p>
+      </div>
+
+      <!-- Vídeo 2 -->
+      <div class="video-card rounded-2xl p-4 sm:p-5">
+        <div class="overflow-hidden rounded-xl bg-black/5 aspect-video mb-3">
+          <video class="w-full h-full object-cover" controls preload="metadata">
+            <source src="https://uploads.zero-two-apis.store/uploads/videos/7c346c40e23f3017392c37f5cd61b5bff4162eefd111bb2cf7b030203fd9d913.mp4" type="video/mp4">
+          </video>
+        </div>
+        <p class="text-xs text-gray-400 text-right">Momento 02</p>
+      </div>
+
+      <!-- Vídeo 3 -->
+      <div class="video-card rounded-2xl p-4 sm:p-5">
+        <div class="overflow-hidden rounded-xl bg-black/5 aspect-video mb-3">
+          <video class="w-full h-full object-cover" controls preload="metadata">
+            <source src="https://uploads.zero-two-apis.store/uploads/videos/b111e75c4e3e088350d46a715f5f0073601f9f346ce6fca017fc3a75dd34050d.mp4" type="video/mp4">
+          </video>
+        </div>
+        <p class="text-xs text-gray-400 text-right">Momento 03</p>
+      </div>
+
+      <!-- Vídeo 4 -->
+      <div class="video-card rounded-2xl p-4 sm:p-5">
+        <div class="overflow-hidden rounded-xl bg-black/5 aspect-video mb-3">
+          <video class="w-full h-full object-cover" controls preload="metadata">
+            <source src="https://uploads.zero-two-apis.store/uploads/videos/e3a03b062397ff0be8fc7622f2ecad9a2734d5b7f70f6f383bce7afd5782fa95.mp4" type="video/mp4">
+          </video>
+        </div>
+        <p class="text-xs text-gray-400 text-right">Momento 04</p>
+      </div>
+
+      <!-- Vídeo 5 -->
+      <div class="video-card rounded-2xl p-4 sm:p-5">
+        <div class="overflow-hidden rounded-xl bg-black/5 aspect-video mb-3">
+          <video class="w-full h-full object-cover" controls preload="metadata">
+            <source src="https://uploads.zero-two-apis.store/uploads/videos/2af77f06e6d85666db6ec37dec3352aaea58c5d9d87b7eee699385b1b5238d3e.mp4" type="video/mp4">
+          </video>
+        </div>
+        <p class="text-xs text-gray-400 text-right">Momento 05</p>
+      </div>
+
+      <!-- Vídeo 6 -->
+      <div class="video-card rounded-2xl p-4 sm:p-5">
+        <div class="overflow-hidden rounded-xl bg-black/5 aspect-video mb-3">
+          <video class="w-full h-full object-cover" controls preload="metadata">
+            <source src="https://uploads.zero-two-apis.store/uploads/videos/a009adaafde3f0d8d8f208934e0ab50c69c831e650b10af8d6fe4a79726e5a27.mp4" type="video/mp4">
+          </video>
+        </div>
+        <p class="text-xs text-gray-400 text-right">Momento 06</p>
+      </div>
+
+      <!-- Vídeo 7 -->
+      <div class="video-card rounded-2xl p-4 sm:p-5">
+        <div class="overflow-hidden rounded-xl bg-black/5 aspect-video mb-3">
+          <video class="w-full h-full object-cover" controls preload="metadata">
+            <source src="https://uploads.zero-two-apis.store/uploads/videos/a48d863be8db2357551a68936a9c2086ce444b231bf63997a9d44b45bba60077.mp4" type="video/mp4">
+          </video>
+        </div>
+        <p class="text-xs text-gray-400 text-right">Momento 07</p>
+      </div>
+
+      <!-- Vídeo 8 -->
+      <div class="video-card rounded-2xl p-4 sm:p-5">
+        <div class="overflow-hidden rounded-xl bg-black/5 aspect-video mb-3">
+          <video class="w-full h-full object-cover" controls preload="metadata">
+            <source src="https://uploads.zero-two-apis.store/uploads/videos/93aaf171dbfb491aecf4d0dd550c704bebf8097bca0bcd7e543322191c1dde87.mp4" type="video/mp4">
+          </video>
+        </div>
+        <p class="text-xs text-gray-400 text-right">Momento 08</p>
+      </div>
+
+      <!-- Vídeo 9 -->
+      <div class="video-card rounded-2xl p-4 sm:p-5">
+        <div class="overflow-hidden rounded-xl bg-black/5 aspect-video mb-3">
+          <video class="w-full h-full object-cover" controls preload="metadata">
+            <source src="https://uploads.zero-two-apis.store/uploads/videos/7f33ab8dbb50d1bbe0b89396dca7a4915a85c499ab3c13d6a7bc4fde1a4887fc.mp4" type="video/mp4">
+          </video>
+        </div>
+        <p class="text-xs text-gray-400 text-right">Momento 09</p>
+      </div>
+
+      <!-- VÍDEO 10: FIM DO CICLO (Triste/Delicado) -->
+      <div id="lastVideoSection" class="pt-10 transition-all duration-700">
+        <div class="p-6 sm:p-8 rounded-3xl border border-gray-700/60 bg-gray-900/80 backdrop-blur-md shadow-2xl relative overflow-hidden group">
+          
+          <div class="flex items-center justify-between mb-4">
+            <span class="serif-title text-lg text-gray-200 tracking-wide font-medium flex items-center gap-2">
+              <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+              </svg>
+              Fim do ciclo
+            </span>
+            <span class="text-xs tracking-wider px-3 py-1 bg-gray-800 text-gray-300 rounded-full border border-gray-700">Último momento</span>
+          </div>
+
+          <div class="overflow-hidden rounded-2xl bg-black aspect-video mb-4 shadow-inner ring-1 ring-white/10">
+            <video class="w-full h-full object-cover" controls preload="metadata">
+              <source src="https://uploads.zero-two-apis.store/uploads/videos/5b28b2a9b095d05469326594a27c322c6e069f94cf42030e95978da14e86867c.mp4" type="video/mp4">
+            </video>
+          </div>
+          
+          <p class="text-center text-xs text-gray-400 italic font-light">
+            Algumas lembranças continuam vivas com o tempo.
+          </p>
         </div>
 
-        <!-- Container da Imagem Misteriosa -->
-        <div id="image-container" class="opacity-0 w-full max-w-xs md:max-w-sm rounded-2xl overflow-hidden shadow-[0_15px_50px_rgba(0,0,0,0.6)] border border-rose-950/20 transition-all duration-1000">
-            <img 
-                src="https://files.catbox.moe/cp16qm.jpg" 
-                alt="Revelação" 
-                class="w-full h-auto object-cover object-center"
-                onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=600'; console.log('Erro ao carregar imagem principal.');"
-            />
-        </div>
-
-        <!-- Mensagem de Texto de Carlos para Henrique -->
-        <div id="romantic-text-container" class="opacity-0 w-full max-w-lg px-6 py-6 text-center transition-all duration-1000 bg-black/25 backdrop-blur-md rounded-2xl border border-rose-200/10 shadow-xl">
-            <!-- Cabeçalho em Destaque -->
-            <div class="border-b border-rose-300/20 pb-3 mb-4">
-                <span class="block font-sans text-xs tracking-widest text-rose-300 uppercase">Mensagem Especial</span>
-                <h1 class="font-serif text-lg md:text-xl text-rose-200 font-bold tracking-wide mt-1">
-                    De: Carlos Walacy &nbsp;•&nbsp; Para: José Henrique
-                </h1>
+        <!-- Envelope/Carta Flutuante -->
+        <div class="mt-12 flex flex-col items-center justify-center">
+          <button id="openLetterBtn" class="floating-envelope group focus:outline-none flex flex-col items-center cursor-pointer">
+            <div class="w-16 h-16 sm:w-20 sm:h-20 bg-gray-800/90 hover:bg-gray-700/90 border border-gray-600/50 rounded-2xl flex items-center justify-center shadow-xl transition-all duration-300 group-hover:scale-105 group-hover:border-gray-400">
+              <svg class="w-8 h-8 sm:w-10 sm:h-10 text-gray-300 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+              </svg>
             </div>
-            
-            <!-- Corpo da Carta Romântica -->
-            <p class="font-serif text-base md:text-lg text-rose-100 italic drop-shadow-md leading-relaxed text-justify">
-                Henrique, eu escrevi isso não para te assustar ou nada, mas sim para demonstrar o amor que sinto por você, pelo carinho e pela dedicação que você tem por mim. Graças a você, eu pude mudar, mudar para melhor... para um garoto mais responsável, mais animado, mais sincero, mais sociável e romântico.
-            </p>
-            <p class="font-serif text-base md:text-lg text-rose-100 italic drop-shadow-md leading-relaxed text-justify mt-4">
-                Você foi a primeira pessoa por quem eu realmente senti algo exatamente romântico. Por você, eu me assumi, te apresentei até para as pessoas menos íntimas que eu tinha, te dei muitos presentes, tudo isso pela gente. Não, isso não é um texto para te dar broncas nem nada, mas sim para você saber que eu sempre estarei aqui quando você precisar. Seja para rir, chorar, defender, estudar, trabalhar, tudo!
-            </p>
-            <p class="font-serif text-base md:text-lg text-rose-100 italic drop-shadow-md leading-relaxed text-justify mt-4">
-                Eu finalmente pude me sentir confortável ao lado de alguém, você. Você fez eu sentir coisas que eu nunca senti na minha vida. Mas graças a você, eu finalmente consegui me sentir seguro novamente, me recuperar de ferimentos graves do passado e finalmente mudar para alguém melhor. Eu te amo! 💙
-            </p>
+            <span class="mt-3 text-xs tracking-widest uppercase text-gray-400 group-hover:text-gray-200 transition-colors font-medium">
+              Toque para ler a carta
+            </span>
+          </button>
         </div>
 
-        <!-- Player de Vídeo e Áudio Escondido inicialmente -->
-        <div id="video-wrapper" class="hidden w-full max-w-md rounded-2xl overflow-hidden shadow-[0_15px_40px_rgba(244,63,94,0.3)] border border-rose-500/30 transition-all duration-1000 transform scale-95 opacity-0">
-            <video id="romantic-video" class="w-full h-auto aspect-video bg-black" src="https://files.catbox.moe/0mehle.mp4" controls preload="auto"></video>
-        </div>
+      </div>
 
-        <!-- Terminal de Comando Interativo -->
-        <div id="command-terminal-container" class="opacity-0 w-full max-w-lg transition-all duration-1000">
-            <div class="w-full bg-black/80 rounded-2xl border border-rose-500/30 p-4 font-mono text-xs text-rose-300 space-y-3 shadow-2xl">
-                <!-- Cabeçalho do terminal -->
-                <div class="flex items-center justify-between border-b border-rose-500/20 pb-2 mb-1">
-                    <div class="flex items-center space-x-2">
-                        <span class="w-3 h-3 rounded-full bg-red-500/80"></span>
-                        <span class="w-3 h-3 rounded-full bg-yellow-500/80"></span>
-                        <span class="w-3 h-3 rounded-full bg-green-500/80"></span>
-                        <span class="text-rose-400/70 ml-2 text-[11px] font-semibold">trilha_sonora.sh</span>
-                    </div>
-                    <span class="text-[10px] text-rose-500/50">v1.2.6</span>
-                </div>
+    </main>
 
-                <!-- Campo de Entrada com Comando Pré-pronto e Botão Enter -->
-                <div class="flex items-center justify-between bg-black/40 p-2.5 rounded-xl border border-rose-500/15">
-                    <div class="flex items-center space-x-2 overflow-x-auto whitespace-nowrap scrollbar-none py-1">
-                        <span class="text-emerald-400 font-bold">carlos@amor:~$</span>
-                        <span id="cmd-text" class="text-rose-100 font-bold tracking-wide select-all">./play_our_song.sh</span>
-                    </div>
-                    <button id="btn-enter" class="bg-rose-600 hover:bg-rose-500 active:bg-rose-700 text-white font-bold font-mono px-4 py-1.5 rounded-lg text-xs flex items-center space-x-1.5 transition-all duration-200 shadow-md shadow-rose-950/50 hover:scale-105 active:scale-95 focus:outline-none shrink-0 animate-pulse">
-                        <span>ENTER</span>
-                        <span class="text-rose-200">↵</span>
-                    </button>
-                </div>
+    <footer class="max-w-md mx-auto text-center mt-20 text-xs text-gray-500">
+      <p class="transition-colors duration-700" id="footerText">Com carinho, para hoje e para sempre.</p>
+    </footer>
+  </div>
 
-                <!-- Painel de Transcrição/Tradução da Música -->
-                <div id="song-terminal-log" class="hidden h-40 overflow-y-auto space-y-2.5 bg-black/70 p-3 rounded-xl text-left border border-rose-950/50 transition-all duration-500 font-sans">
-                    <!-- Logs adicionados dinamicamente via JS -->
-                </div>
-            </div>
-        </div>
+  <!-- Modal da Carta de Despedida -->
+  <div id="letterModal" class="modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md">
+    <div class="modal-content bg-zinc-900 border border-zinc-800 text-zinc-200 w-full max-w-lg rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+      
+      <!-- Detalhes decorativos da carta -->
+      <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-zinc-600 to-transparent"></div>
+      
+      <button id="closeLetterBtn" class="absolute top-5 right-5 text-zinc-500 hover:text-zinc-200 p-2 rounded-full hover:bg-zinc-800 transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+
+      <div class="mb-6">
+        <span class="text-xs uppercase tracking-widest text-zinc-500 font-semibold">Uma mensagem para você</span>
+        <h3 class="serif-title text-2xl text-zinc-100 mt-1">Querido Henrique,</h3>
+      </div>
+
+      <!-- Conteúdo da Carta -->
+      <div class="letter-body text-sm sm:text-base text-zinc-300 space-y-4 font-light leading-relaxed">
+        <p>
+          Bom, hoje é seu aniversário, e não podia deixar esse dia especial para você passar em branco. Mesmo que eu sei que terminamos, eu sei que você ainda sente minha falta, e eu também sinto a sua..
+        </p>
+        <p>
+          Então eu resolvi fazer esse HTML para relembrar de algumas músicas que eu acabei dedicando a você. É claro que o nosso término foi algo pesado para nós, mas ainda há confiança, amor e carinho no nosso laço.
+        </p>
+        <p>
+          Eu peço desculpas por ter partido, mas saiba que sempre que precisar, terá apoio, companhia e carinho. E feliz 15 anos!
+        </p>
+      </div>
+
+      <!-- Assinatura em estilo carta -->
+      <div class="mt-8 pt-4 border-t border-zinc-800/80 text-right">
+        <p class="handwritten-sig text-3xl text-zinc-100 font-medium tracking-wide">
+          Ass: Carlos Walacy 🤍🎐
+        </p>
+      </div>
 
     </div>
+  </div>
 
-    <script>
-        const body = document.body;
-        const initialScreen = document.getElementById('initial-screen');
-        const revealScreen = document.getElementById('reveal-screen');
-        const dangerBtn = document.getElementById('danger-btn');
-        const terminalBox = document.getElementById('terminal-box');
-        const imgContainer = document.getElementById('image-container');
-        const textContainer = document.getElementById('romantic-text-container');
-        const heartsContainer = document.getElementById('hearts-container');
+  <script>
+    // Script da Chuva em Canvas
+    const canvas = document.getElementById('rainCanvas');
+    const ctx = canvas.getContext('2d');
+    let drops = [];
 
-        // Novos elementos da música e terminal de comando
-        const commandTerminalContainer = document.getElementById('command-terminal-container');
-        const btnEnter = document.getElementById('btn-enter');
-        const songTerminalLog = document.getElementById('song-terminal-log');
-        const videoWrapper = document.getElementById('video-wrapper');
-        const romanticVideo = document.getElementById('romantic-video');
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
 
-        // Linhas de texto do terminal hacker
-        const lines = [
-            { id: 'line-1', text: '> Inicializando protocolo de quebra de segurança...', delay: 800 },
-            { id: 'line-2', text: '> Ignorando permissões do sistema local...', delay: 1800 },
-            { id: 'line-3', text: '> Descriptografando arquivos secretos...', delay: 2800 },
-            { id: 'line-4', text: '> Acesso concedido. Abrindo registro...', delay: 3800 }
-        ];
+    // Criar Gotas
+    for (let i = 0; i < 90; i++) {
+      drops.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        length: Math.random() * 18 + 10,
+        speed: Math.random() * 8 + 4,
+        opacity: Math.random() * 0.35 + 0.1
+      });
+    }
 
-        // Tradução poética sincronizada com a minutagem aproximada do vídeo de 59 segundos
-        const lyricsTimeline = [
-            { time: 0, text: "[SISTEMA] Conectando trilha sonora do vídeo..." },
-            { time: 2, text: "Podemos morrer juntos? E existe um paraíso?" },
-            { time: 8, text: "Todo mundo sabe disso, então é melhor chegar mais perto." },
-            { time: 14, text: "Me foda como se fôssemos as duas últimas pessoas na—" },
-            { time: 20, text: "Todo mundo está morrendo, você é quem eu estou segurando, explosões" },
-            { time: 26, text: "Me foda como se fôssemos as duas últimas pessoas na Terra, Terra, Terra" },
-            { time: 38, text: "Me foda como se fôssemos as duas últimas pessoas na Terra, Terra, Terra" },
-            { time: 48, text: "Me foda como se fôssemos as duas últimas pessoas na—" },
-            { time: 54, text: "[SISTEMA] Reprodução concluída. Obrigado por ser meu universo, Henrique. 💙" }
-        ];
+    function drawRain() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drops.forEach(drop => {
+        ctx.beginPath();
+        ctx.moveTo(drop.x, drop.y);
+        ctx.lineTo(drop.x, drop.y + drop.length);
+        ctx.strokeStyle = `rgba(180, 195, 210, ${drop.opacity})`;
+        ctx.lineWidth = 1;
+        ctx.lineCap = 'round';
+        ctx.stroke();
 
-        let lastLoggedIndex = -1;
-
-        // Função para criar corações flutuantes no fundo
-        function createHeart() {
-            const hearts = ['❤️', '💙', '💕', '💖', '✨'];
-            const heart = document.createElement('div');
-            heart.classList.add('heart');
-            heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
-            
-            heart.style.left = Math.random() * 100 + 'vw';
-            const size = Math.random() * 20 + 15;
-            heart.style.fontSize = size + 'px';
-            const duration = Math.random() * 5 + 6;
-            heart.style.animationDuration = duration + 's';
-            
-            heartsContainer.appendChild(heart);
-
-            setTimeout(() => {
-                heart.remove();
-            }, duration * 1000);
+        drop.y += drop.speed;
+        if (drop.y > canvas.height) {
+          drop.y = -drop.length;
+          drop.x = Math.random() * canvas.width;
         }
+      });
+      requestAnimationFrame(drawRain);
+    }
+    drawRain();
 
-        dangerBtn.addEventListener('click', () => {
-            // 1. Primeira transição: Vai para o visual de "Hacker"
-            body.classList.remove('bg-neutral-50', 'text-neutral-900');
-            body.classList.add('bg-[#0b0101]', 'text-red-600');
+    // Efeito de escurecer a tela ao rolar até o último vídeo
+    const lastSection = document.getElementById('lastVideoSection');
+    const headerTitle = document.getElementById('headerTitle');
+    const headerSub = document.getElementById('headerSub');
+    const footerText = document.getElementById('footerText');
 
-            initialScreen.classList.add('opacity-0', 'scale-90');
-            
-            setTimeout(() => {
-                initialScreen.classList.add('hidden');
-                revealScreen.classList.remove('hidden');
-                
-                // Começar a simular o terminal hacker
-                startTerminalSequence();
-            }, 1000);
-        });
+    window.addEventListener('scroll', () => {
+      const rect = lastSection.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      
+      // Quando o último vídeo se aproxima da tela
+      if (rect.top < windowHeight * 0.75) {
+        document.body.style.backgroundColor = '#0b0c0e';
+        canvas.style.opacity = '1';
+        headerTitle.style.color = '#e4e4e7';
+        headerSub.style.color = '#9ca3af';
+        footerText.style.color = '#6b7280';
+      } else {
+        document.body.style.backgroundColor = '#f4f4f6';
+        canvas.style.opacity = '0';
+        headerTitle.style.color = '#1f2937';
+        headerSub.style.color = '#6b7280';
+        footerText.style.color = '#9ca3af';
+      }
+    });
 
-        function startTerminalSequence() {
-            lines.forEach((line) => {
-                setTimeout(() => {
-                    const element = document.getElementById(line.id);
-                    element.textContent = line.text;
-                    element.classList.remove('opacity-0');
-                    element.classList.add('opacity-100');
-                    
-                    if (line.id !== 'line-4') {
-                        element.classList.remove('cursor');
-                    }
-                }, line.delay);
-            });
+    // Controle da Carta (Modal)
+    const openBtn = document.getElementById('openLetterBtn');
+    const closeBtn = document.getElementById('closeLetterBtn');
+    const modal = document.getElementById('letterModal');
 
-            // 2. Segunda transição (A Transição Romântica):
-            setTimeout(() => {
-                // Esconde completamente o terminal hacker para focar na surpresa
-                terminalBox.classList.add('opacity-0', 'scale-90');
-                setTimeout(() => {
-                    terminalBox.style.display = 'none';
-                }, 1000);
+    openBtn.addEventListener('click', () => {
+      modal.classList.add('active');
+    });
 
-                // O fundo muda para o vermelho romântico pulsante
-                body.classList.remove('bg-[#0b0101]');
-                body.classList.add('romantic-bg-pulse');
-                
-                // Faz a foto aparecer em fade-in
-                imgContainer.classList.remove('opacity-0');
-                imgContainer.classList.add('fade-in');
+    closeBtn.addEventListener('click', () => {
+      modal.classList.remove('active');
+    });
 
-                // Faz a carta do Carlos e o terminal de música surgirem
-                setTimeout(() => {
-                    textContainer.classList.remove('opacity-0');
-                    textContainer.classList.add('fade-in-text');
-                    
-                    commandTerminalContainer.classList.remove('opacity-0');
-                    commandTerminalContainer.classList.add('fade-in-text');
-                    
-                    // Iniciar chuva de corações
-                    setInterval(createHeart, 500);
-                }, 1200);
-
-            }, 5200);
-        }
-
-        // 3. Terceira Ação: Ao clicar no botão ENTER do terminal de música
-        btnEnter.addEventListener('click', () => {
-            // Desativa e altera o botão para dar feedback visual de execução
-            btnEnter.disabled = true;
-            btnEnter.classList.remove('animate-pulse', 'bg-rose-600', 'hover:bg-rose-500');
-            btnEnter.classList.add('bg-zinc-800', 'text-zinc-500', 'cursor-not-allowed');
-            btnEnter.innerHTML = `<span>RODANDO</span> <span class="animate-spin">⏳</span>`;
-
-            // Revela o player do vídeo de forma fluida
-            videoWrapper.classList.remove('hidden');
-            setTimeout(() => {
-                videoWrapper.classList.remove('opacity-0', 'scale-95');
-                videoWrapper.classList.add('opacity-100', 'scale-100');
-                
-                // Tenta reproduzir o vídeo automaticamente
-                romanticVideo.play().catch(error => {
-                    console.log("A reprodução automática foi bloqueada. Aguardando interação do usuário no player.", error);
-                });
-            }, 100);
-
-            // Abre o painel de transcrição no terminal
-            songTerminalLog.classList.remove('hidden');
-            
-            // Rola a página suavemente para o Henrique visualizar tudo sincronizado
-            setTimeout(() => {
-                videoWrapper.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 800);
-        });
-
-        // 4. Transcrever os momentos do vídeo no terminal em tempo real com base no tempo do vídeo
-        romanticVideo.addEventListener('timeupdate', () => {
-            const currentTime = romanticVideo.currentTime;
-            
-            lyricsTimeline.forEach((item, index) => {
-                if (currentTime >= item.time && index > lastLoggedIndex) {
-                    lastLoggedIndex = index;
-                    
-                    const logLine = document.createElement('div');
-                    
-                    // Diferencia visualmente as mensagens do sistema das estrofes da música
-                    if (item.text.startsWith("[")) {
-                        logLine.className = 'text-rose-400/80 font-mono text-[11px] leading-relaxed pl-2 text-left';
-                        logLine.innerHTML = `<span>${item.text}</span>`;
-                    } else {
-                        logLine.className = 'text-rose-100 font-serif text-sm border-l-2 border-rose-500 pl-3.5 py-1 animate-pulse leading-relaxed text-left font-bold italic';
-                        logLine.innerHTML = `<span>"${item.text}"</span>`;
-                    }
-                    
-                    songTerminalLog.appendChild(logLine);
-                    
-                    // Rola a área de logs automaticamente para baixo a cada verso novo
-                    songTerminalLog.scrollTop = songTerminalLog.scrollHeight;
-                }
-            });
-        });
-
-        // Reinicia os logs caso o vídeo recomece ou sofra busca manual de tempo (seek)
-        romanticVideo.addEventListener('seeked', () => {
-            if (romanticVideo.currentTime < 1) {
-                lastLoggedIndex = -1;
-                songTerminalLog.innerHTML = '';
-            }
-        });
-    </script>
+    // Fechar ao clicar fora da carta
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+      }
+    });
+  </script>
 </body>
 </html>
